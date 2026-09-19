@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.szr.docmanagerweb.mapper.DocumentMapper">
+    <select id="selectDocumentPageWithSectionCount" resultType="com.szr.docmanagerweb.dto.DocumentDTO">
+        SELECT d.id, d.title, d.file_type, d.create_time, d.update_time,
+        COUNT(s.id) AS section_count
+        FROM document d
+        LEFT JOIN document_section s ON d.id = s.document_id
+        <where>
+            <if test="keyword != null and keyword != ''">
+                d.title LIKE '%' || #{keyword} || '%'
+            </if>
+        </where>
+        GROUP BY d.id, d.title, d.file_type, d.create_time, d.update_time
+        ORDER BY d.update_time DESC
+    </select>
+</mapper>

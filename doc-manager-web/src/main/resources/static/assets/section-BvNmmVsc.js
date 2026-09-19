@@ -1,0 +1,1 @@
+import{n as e}from"./_plugin-vue_export-helper-D2ABSoPg.js";var t=t=>e.get(`/sections`,{params:t}),n=t=>e.get(`/sections/${t}`),r=(t,n)=>{let r={...n};return n.tagIds&&(r.tagIds=n.tagIds.join(`,`)),e.put(`/sections/${t}`,null,{params:r})},i=t=>e.delete(`/sections/${t}`);export{r as i,n,t as r,i as t};
