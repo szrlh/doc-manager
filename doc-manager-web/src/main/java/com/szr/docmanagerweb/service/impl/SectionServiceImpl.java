@@ -43,7 +43,7 @@ public class SectionServiceImpl extends ServiceImpl<DocumentSectionMapper, Docum
     public IPage<SectionDTO> listSections(int page, int size, Long documentId, Long categoryId, Long tagId,
                                           String keyword) {
         // 创建分页参数（MyBatis-Plus 页码从1开始）
-        Page<SectionDTO> pageParam = new Page<>(page + 1, size);
+        Page<SectionDTO> pageParam = new Page<>(page + 1L, size);
         // 执行自定义查询
         IPage<SectionDTO> sectionPage = sectionMapper.selectSectionPageWithDetails(pageParam, documentId, categoryId,
                 tagId, keyword);

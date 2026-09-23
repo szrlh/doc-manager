@@ -1,7 +1,10 @@
 package com.szr.docmanagerweb.dto;
 
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 搜索结果 DTO
@@ -12,6 +15,9 @@ import lombok.Data;
  * @since 2026/09/04
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class SearchResultDTO {
 
     /**

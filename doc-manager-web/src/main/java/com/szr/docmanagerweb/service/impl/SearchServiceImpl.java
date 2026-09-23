@@ -40,7 +40,7 @@ public class SearchServiceImpl implements SearchService {
     public IPage<SearchResultDTO> searchSections(String keyword, int page, int size) {
         if (!StringUtils.hasText(keyword)) {
             // 关键词为空，返回空分页
-            return new Page<>(page + 1, size, 0);
+            return new Page<>(page + 1L, size, 0);
         }
 
         // 1. 查询所有匹配片段（数据量小，直接查全量）
@@ -64,7 +64,7 @@ public class SearchServiceImpl implements SearchService {
 
         // 3. 手动分页
         int total = sortedSections.size();
-        Page<SearchResultDTO> resultPage = new Page<>(page + 1, size, total);
+        Page<SearchResultDTO> resultPage = new Page<>(page + 1L, size, total);
         int start = (int) Math.min((long) page * size, total);
         int end = Math.min(start + size, total);
         if (start > end) {
@@ -132,8 +132,12 @@ public class SearchServiceImpl implements SearchService {
         int end = Math.min(content.length(), index + keyword.length() + 50);
         String snippet = content.substring(start, end);
         // 添加省略号
-        if (start > 0) snippet = "..." + snippet;
-        if (end < content.length()) snippet = snippet + "...";
+        if (start > 0) {
+            snippet = "..." + snippet;
+        }
+        if (end < content.length()) {
+            snippet = snippet + "...";
+        }
         return snippet;
     }
 }

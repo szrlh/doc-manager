@@ -21,7 +21,6 @@ public interface SectionTagMapper extends BaseMapper<SectionTag> {
      * 使用一条 INSERT 语句插入多条记录，提高性能
      *
      * @param list 待插入的关联列表
-     * @return 影响行数
      */
-    int insertBatch(@Param("list") List<SectionTag> list);
+    void insertBatch(@Param("list") List<SectionTag> list);
 }

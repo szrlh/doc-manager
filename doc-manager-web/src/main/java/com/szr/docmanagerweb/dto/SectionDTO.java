@@ -2,7 +2,10 @@ package com.szr.docmanagerweb.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -15,6 +18,9 @@ import java.util.List;
  * @since 2026/09/04
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class SectionDTO {
 
     /**

@@ -1,7 +1,9 @@
 package com.szr.docmanagerweb.vo;
 
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +17,8 @@ import java.util.List;
  * @since 2026/09/04
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class CategoryTreeVO {
 
     /**

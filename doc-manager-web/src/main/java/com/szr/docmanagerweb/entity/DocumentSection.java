@@ -4,7 +4,7 @@ package com.szr.docmanagerweb.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Data;
+import lombok.*;
 
 /**
  * 文档片段实体类，对应表 document_section
@@ -16,7 +16,11 @@ import lombok.Data;
  * @version 1.0
  * @since 2026/09/04
  */
-@Data
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @TableName("document_section")
 public class DocumentSection {
     

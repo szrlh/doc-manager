@@ -1,6 +1,7 @@
 package com.szr.docmanagerweb.service.impl;
 
 
+import com.alibaba.fastjson2.JSON;
 import com.szr.docmanagerweb.entity.Category;
 import com.szr.docmanagerweb.entity.CategoryTraining;
 import com.szr.docmanagerweb.mapper.CategoryMapper;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -75,8 +77,10 @@ public class ClassifierServiceImpl implements ClassifierService {
         List<Category> categories = categoryMapper.selectList(null);
         for (Category category : categories) {
             String ruleKeywords = category.getRuleKeywords();
-            if (ruleKeywords == null || ruleKeywords.trim().isEmpty()) continue;
-            List<String> keywords = parseJsonArray(ruleKeywords);
+            if (ruleKeywords == null || ruleKeywords.trim().isEmpty()) {
+                continue;
+            }
+            List<String> keywords = JSON.parseArray(ruleKeywords, String.class);
             int hitCount = 0;
             for (String kw : keywords) {
                 if (text.contains(kw)) {
@@ -117,15 +121,18 @@ public class ClassifierServiceImpl implements ClassifierService {
         int totalDocs = trainingData.size();
         Set<String> vocabulary = new HashSet<>();
 
+        Pattern splitPattern = Pattern.compile("[\\s\\p{Punct}]+");
         for (CategoryTraining sample : trainingData) {
             Long catId = sample.getCategoryId();
             categoryDocCount.merge(catId, 1, Integer::sum);
             String content = sample.getContentText();
             // 简单分词：按空格和常见分隔符拆分，这里简化处理，可替换为更好的分词器
-            String[] words = content.split("[\\s\\p{Punct}]+");
+            String[] words = splitPattern.split(content);
             Map<String, Integer> wordFreq = categoryWordCount.computeIfAbsent(catId, k -> new HashMap<>());
             for (String word : words) {
-                if (word.isEmpty()) continue;
+                if (word.isEmpty()) {
+                    continue;
+                }
                 wordFreq.merge(word, 1, Integer::sum);
                 categoryTotalWords.merge(catId, 1, Integer::sum);
                 vocabulary.add(word);
@@ -134,8 +141,8 @@ public class ClassifierServiceImpl implements ClassifierService {
 
         // 计算先验概率和条件概率（使用拉普拉斯平滑）
         Map<Long, Double> priorProb = new HashMap<>();
-        for (Long catId : categoryDocCount.keySet()) {
-            priorProb.put(catId, Math.log((double) categoryDocCount.get(catId) / totalDocs));
+        for (Map.Entry<Long, Integer> entry : categoryDocCount.entrySet()) {
+            priorProb.put(entry.getKey(), Math.log((double) entry.getValue() / totalDocs));
         }
 
         // 对输入文本分词
@@ -147,7 +154,9 @@ public class ClassifierServiceImpl implements ClassifierService {
             int totalWordsInCat = categoryTotalWords.getOrDefault(catId, 0);
             int vocabSize = vocabulary.size();
             for (String word : inputWords) {
-                if (word.isEmpty()) continue;
+                if (word.isEmpty()) {
+                    continue;
+                }
                 int count = wordFreq.getOrDefault(word, 0);
                 double prob = (count + 1.0) / (totalWordsInCat + vocabSize);
                 score += Math.log(prob);
@@ -166,30 +175,12 @@ public class ClassifierServiceImpl implements ClassifierService {
     }
 
     /**
-     * 解析 JSON 数组字符串（简单解析，适用于形如 ["a","b"] 的格式）
-     */
-    private List<String> parseJsonArray(String json) {
-        List<String> result = new ArrayList<>();
-        if (json == null || json.trim().isEmpty()) return result;
-        String trimmed = json.trim();
-        if (trimmed.startsWith("[") && trimmed.endsWith("]")) {
-            String inner = trimmed.substring(1, trimmed.length() - 1);
-            String[] items = inner.split(",");
-            for (String item : items) {
-                String cleaned = item.trim().replaceAll("^\"|\"$", "");
-                if (!cleaned.isEmpty()) {
-                    result.add(cleaned);
-                }
-            }
-        }
-        return result;
-    }
-
-    /**
      * 统计子字符串出现次数
      */
     private int countOccurrences(String text, String keyword) {
-        if (keyword == null || keyword.isEmpty()) return 0;
+        if (keyword == null || keyword.isEmpty()) {
+            return 0;
+        }
         int count = 0;
         int index = 0;
         while ((index = text.indexOf(keyword, index)) != -1) {

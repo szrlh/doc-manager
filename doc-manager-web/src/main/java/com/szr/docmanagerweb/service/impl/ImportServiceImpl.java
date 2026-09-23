@@ -180,7 +180,9 @@ public class ImportServiceImpl implements ImportService {
      * 根据文件名确定文件类型
      */
     private String determineFileType(String filename) {
-        if (filename == null) return "txt";
+        if (filename == null) {
+            return "txt";
+        }
         String lower = filename.toLowerCase();
         if (lower.endsWith(".md") || lower.endsWith(".markdown")) {
             return "md";
@@ -332,7 +334,9 @@ public class ImportServiceImpl implements ImportService {
         int order = 1;
         for (String part : parts) {
             String trimmedPart = part.trim();
-            if (trimmedPart.isEmpty()) continue;
+            if (trimmedPart.isEmpty()) {
+                continue;
+            }
             ImportedSectionDTO dto = new ImportedSectionDTO();
             // 提取首行作为标题（截取50字符）
             String firstLine = trimmedPart.split("\\n")[0].trim();
@@ -381,7 +385,9 @@ public class ImportServiceImpl implements ImportService {
      * 截断文本到指定长度
      */
     private String truncateText(String text, int maxLength) {
-        if (text == null) return "";
+        if (text == null) {
+            return "";
+        }
         return text.length() <= maxLength ? text : text.substring(0, maxLength);
     }
 }

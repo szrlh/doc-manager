@@ -39,7 +39,7 @@ public class DocumentServiceImpl extends ServiceImpl<DocumentMapper, Document> i
     public IPage<DocumentDTO> listDocuments(int page, int size, String keyword) {
         // 创建分页对象（页码+1？MyBatis-Plus 的 Page 默认页码从1开始，而 Controller 可能传0，需要统一）
         // 此处假设 Controller 已经将页码转换为从1开始，或者我们在 Service 内部处理
-        Page<DocumentDTO> pageParam = new Page<>(page + 1, size); // 如果调用方从0开始，则加1
+        Page<DocumentDTO> pageParam = new Page<>(page + 1L, size); // 如果调用方从0开始，则加1
         return documentMapper.selectDocumentPageWithSectionCount(pageParam, keyword);
     }
 

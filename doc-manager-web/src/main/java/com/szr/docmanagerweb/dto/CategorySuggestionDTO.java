@@ -1,7 +1,7 @@
 package com.szr.docmanagerweb.dto;
 
 
-import lombok.Data;
+import lombok.*;
 
 /**
  * 分类建议 DTO
@@ -12,6 +12,9 @@ import lombok.Data;
  * @since 2026/09/04
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class CategorySuggestionDTO {
 
     /**

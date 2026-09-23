@@ -2,7 +2,8 @@ package com.szr.docmanagerweb.controller;
 
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 /**
  * 前端路由回退控制器
@@ -22,8 +23,8 @@ public class ForwardController {
      * 转发到 index.html。
      * 含点号的路径（如 /assets/xxx.js）不会匹配，避免影响静态资源访问。
      */
-    @RequestMapping(value = {"/", "/{path:[^.]*}"})
-    public String forward() {
+    @GetMapping(value = {"/", "/{path:[^.]*}"})
+    public String forward(@PathVariable(required = false) String path) {
         return "forward:/index.html";
     }
 }

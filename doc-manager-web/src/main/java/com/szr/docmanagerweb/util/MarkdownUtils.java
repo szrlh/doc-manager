@@ -1,6 +1,8 @@
 package com.szr.docmanagerweb.util;
 
 
+import lombok.experimental.UtilityClass;
+
 /**
  * Markdown 转纯文本工具类
  * 提供简单的 Markdown 标记去除功能
@@ -9,6 +11,7 @@ package com.szr.docmanagerweb.util;
  * @version 1.0
  * @since 2026/09/04
  */
+@UtilityClass
 public class MarkdownUtils {
     
     /**
@@ -36,9 +39,9 @@ public class MarkdownUtils {
         // 去除有序列表标记
         text = text.replaceAll("(?m)^\\s*\\d+\\.\\s+", "");
         // 去除链接 [text](url)
-        text = text.replaceAll("\\[([^\\]]*)\\]\\([^\\)]*\\)", "$1");
+        text = text.replaceAll("\\[([^]]*)]\\([^)]*\\)", "$1");
         // 去除图片 ![alt](url)
-        text = text.replaceAll("!\\[([^\\]]*)\\]\\([^\\)]*\\)", "$1");
+        text = text.replaceAll("!\\[([^]]*)]\\([^)]*\\)", "$1");
         // 去除引用符号
         text = text.replaceAll("(?m)^>\\s*", "");
         // 压缩多余空行
